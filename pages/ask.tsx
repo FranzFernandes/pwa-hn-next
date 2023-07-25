@@ -1,15 +1,20 @@
+import { useRouter } from 'next/router'
 import Page from '../components/page'
 import Stories from '../components/stories'
-import getStories from '../lib/get-stories'
+import { useStories } from '../lib/get-stories'
 
-export async function getStaticProps() {
-  const stories = await getStories('askstories')
-  return { props: { stories }, revalidate: 1 }
-}
-export default function News({ stories }) {
+export default function Ask() {
+  const router = useRouter();
+  const page = Number(router.query.page ?? 1);
+  const storyIds = useStories("askstories", { page });
+  const offset = (page - 1) * 30;
   return (
     <Page>
-      <Stories stories={stories} />
+      {storyIds.isLoading ? (
+        <p>loading...</p>
+      ) : (
+        <Stories page={page} offset={offset} stories={storyIds.data.data} />
+      )}
     </Page>
   )
 }

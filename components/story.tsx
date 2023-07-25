@@ -2,7 +2,7 @@ import Link from 'next/link'
 import timeAgo from '../lib/time-ago'
 import parse from 'url-parse'
 
-const Story = ({ id, title, date, url, user, score, commentsCount }: any) => {
+const Story = ({ id, title, date, url, user, score, descendants }: any) => {
   const { host } = parse(url)
   return (
     <div>
@@ -37,7 +37,7 @@ const Story = ({ id, title, date, url, user, score, commentsCount }: any) => {
         |{' '}
         <Link href={`/item/${id}`} legacyBehavior>
           <a>
-            {commentsCount} {plural(commentsCount, 'comment')}
+            {descendants} {plural(descendants, 'comment')}
           </a>
         </Link>
       </div>

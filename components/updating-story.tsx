@@ -1,15 +1,15 @@
-import { useEffect, useState } from 'react'
-import { observe } from '../lib/get-item'
+import { useStory } from '../lib/get-stories'
 import Story from './story'
 
 const UpdatingStory = (props) => {
-  const [state, setState] = useState(props)
+  const story = useStory(props.storyId);
 
-  useEffect(() => {
-    return observe(props.id, (data) => setState(data))
-  }, [props.id])
-
-  return <Story {...state} />
+  if (story.isLoading) {
+    return (
+      <p>loading story...</p>
+    )
+  }
+  return <Story {...story.data.data} />
 }
 
 export default UpdatingStory

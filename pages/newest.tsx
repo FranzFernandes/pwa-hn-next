@@ -1,16 +1,20 @@
-import React from 'react'
-import Page from '../components/page'
-import Stories from '../components/stories'
-import getStories from '../lib/get-stories'
+import React from "react";
+import Page from "../components/page";
+import { useStories, useStory } from "../lib/get-stories";
+import Stories from "../components/stories";
+import { useRouter } from "next/router";
 
-export async function getStaticProps() {
-  const stories = await getStories('newstories')
-  return { props: { stories }, revalidate: 1 }
-}
-export default function Newest({ stories }) {
+export default function Newest() {
+  const router = useRouter();
+  const page = Number(router.query.page ?? 1);
+  const stories = useStories("newstories", { page });
   return (
     <Page>
-      <Stories stories={stories} />
+      {stories.isLoading ? (
+        <p>loading stories...</p>
+      ) : (
+        <Stories stories={stories.data.data} />
+      )}
     </Page>
-  )
+  );
 }
